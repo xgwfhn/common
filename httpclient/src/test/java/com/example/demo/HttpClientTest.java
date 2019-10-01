@@ -8,15 +8,82 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 @RunWith(SpringRunner.class) 
 @SpringBootTest
 public class HttpClientTest {
 
+	@Test
+	public  void getDetailInfoByWorkNo()  {
+		  try {
+			   
+			   CloseableHttpClient httpClient = HttpClients.createDefault();
+				//HttpPost httpPost = new HttpPost("http://192.168.9.67:18063/rest/outappinter/workExcute");
+				HttpPost httpPost = new HttpPost("http://10.12.64.23:18063/rest/outappinter/workExcute");
+				
+				httpPost.addHeader("Content-Type", "application/json");
+				String str="{\r\n" + 
+						"\"requestInfo\": {\r\n" + 
+						"\"appId\": \"gjouzzvpbj7ij2em\",\r\n" + 
+						"\"encryptData\": \"99cmp1yikrauun35\",\r\n" + 
+						"\"interfaceAction\": \"0\",\r\n" + 
+						"\"interfaceMark\": \"workSearch\",\r\n" + 
+						"\"version\": \"1.0\"\r\n" + 
+						"  },\r\n" + 
+						"\"searchInfo\": {\r\n" + 
+						"\"infoCodes\": \"\",\r\n" + 
+						"\"noType\": \"workNo\",\r\n" + 
+						//"\"workNo\": \"HK201909205758630\"\r\n" + 
+						"\"workNo\": \"HK201909250277406\"\r\n" + 
+						"  }\r\n" + 
+						"}";
+				httpPost.setEntity(new StringEntity(StringEscapeUtils.unescapeJava(str),"UTF-8")); //防止中文乱码
+
+				CloseableHttpResponse response = httpClient.execute(httpPost);
+				System.out.println(response.getStatusLine().getStatusCode() + "\n");
+				HttpEntity entity = response.getEntity();
+				String responseContent = EntityUtils.toString(entity, "UTF-8"); 
+				//System.out.println(responseContent);
+				
+				JSONObject json = JSONObject.fromObject(responseContent);
+				String s = json.get("results").toString();
+				System.out.println("results:"+s);
+				
+				json = JSONObject.fromObject(s);
+				JSONObject workInfoList = json.getJSONArray("workInfoList").getJSONObject(0);
+				 JSONArray fileInfos = workInfoList.getJSONArray("fileInfos");
+				for (int i = 0; i < fileInfos.size(); i++) {
+					JSONObject j=fileInfos.getJSONObject(i);
+					System.out.println("文件编码:"+j.get("fileCode").toString());
+					System.out.println("办件编码:"+j.get("workNo").toString());
+					System.out.println("文件类型:"+j.get("fileType").toString());
+					
+				}
+			
+				response.close();
+				httpClient.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}	
+				
+	}
+
+	
 	@Test
 	public  void getFileByFileCode()  {
 			String surl="http://10.12.64.23:18063/rest/dispatch/file/fileDownLoad";
