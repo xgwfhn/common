@@ -7,6 +7,13 @@ https://blog.csdn.net/FANTASY522272820/article/details/77053573
 nexus2.x 配置阿里云仓库
 https://www.cnblogs.com/godwithus/p/8955824.html
 
+web项目部署结构
+https://blog.csdn.net/weixin_41547486/article/details/81011788
+
+将项目部署到tomcat
+将项目maven install后  将项目点war包  放置到tomcat/webapp 下  启动tomcat
+http://127.0.0.1:8080/maventomcatpublish/  即可访问
+
 maven tomcat 插件  在pom.xml 配置
 <!-- 配置tomcat插件 -->
     <build>
@@ -32,6 +39,7 @@ maven setting.xml 中配置阿里云地址
             <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
   </mirror>
 开发阶段如果打算使用tomcat 推荐用maven tomcat插件 ,因为maven 仓库  下载较慢   推荐使用nexus搭建阿里云仓库 下载较快
+
 
 项目中的配置
 .settings/org.eclipse.wst.common.component

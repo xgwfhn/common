@@ -16,7 +16,7 @@
     </dependency>
   </dependencies>
   <build>
-    <finalName>test5</finalName>
+    <finalName>maventomcatpublish</finalName>
     <!-- 配置tomcat插件 -->
    		<plugins>
             <plugin>
