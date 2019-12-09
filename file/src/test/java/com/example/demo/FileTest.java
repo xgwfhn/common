@@ -15,8 +15,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class) 
 @SpringBootTest
-public class HttpClientTest {
-
+public class FileTest {
+	
 	@Test
 	public  void getFileByFileCode()  {
 			String surl="http://10.12.64.23:18063/rest/dispatch/file/fileDownLoad";
@@ -86,5 +86,6 @@ public class HttpClientTest {
         inStream.close();
         //把outStream里的数据写入内存 
         return outStream.toByteArray();
-}
+	 }
+
 }
